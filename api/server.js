@@ -39,6 +39,19 @@ server.get('/api/users/:id', async (req, res) => {
 })
 
 // [POST] /api/users - Creates a user using the information sent inside the `request body`.
+server.post('/api/users', async (req, res) => {
+    try {
+      const { name, bio } = req.body
+      if (!name || !bio) {
+        res.status(400).json({ message: "Please provide name and bio for the user" })
+      } else {
+        const user = await Users.insert({ name, bio })
+        res.status(201).json(user)
+      }
+    } catch (error) {
+      res.status(500).json({ message: "There was an error while saving the user to the database" })
+    }
+})
 
 // [PUT] /api/users/:id - Updates the user with the specified `id` using data from the `request body`. Returns the modified user
 
